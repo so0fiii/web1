@@ -1,0 +1,68 @@
+{
+  // Opciones del compilador de TypeScript.
+  "compilerOptions": {
+    // Version de JavaScript objetivo que TypeScript toma como referencia.
+    "target": "ES2017",
+
+    // Librerias de tipos disponibles: DOM para navegador y ESNext para JS moderno.
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    // Permite que existan archivos .js junto a .ts/.tsx.
+    "allowJs": true,
+
+    // Evita revisar tipos internos de dependencias para acelerar compilacion.
+    "skipLibCheck": true,
+
+    // Activa comprobaciones estrictas. Muy recomendable para aprender bien.
+    "strict": true,
+
+    // Next.js compila el codigo; TypeScript solo revisa tipos y no emite JS.
+    "noEmit": true,
+
+    // Mejora compatibilidad con paquetes CommonJS.
+    "esModuleInterop": true,
+
+    // Sistema de modulos moderno.
+    "module": "esnext",
+
+    // Resolucion de modulos optimizada para bundlers como Next/Turbopack.
+    "moduleResolution": "bundler",
+
+    // Permite importar archivos JSON si hiciera falta.
+    "resolveJsonModule": true,
+
+    // Obliga a que cada archivo pueda compilarse de forma aislada.
+    "isolatedModules": true,
+
+    // Indica que los archivos .tsx usan JSX moderno de React.
+    "jsx": "react-jsx",
+
+    // Guarda informacion incremental para acelerar revisiones posteriores.
+    "incremental": true,
+
+    // Plugin de TypeScript especifico de Next.js.
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+
+    // Alias de imports. Permite escribir "@/components/..." en vez de rutas largas.
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+
+  // Archivos que TypeScript debe revisar.
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+
+  // Carpetas excluidas de la revision.
+  "exclude": ["node_modules"]
+}

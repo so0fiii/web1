@@ -1,0 +1,276 @@
+/*
+ * Importa Tailwind CSS.
+ *
+ * Tailwind genera utilidades como `bg-white`, `px-5`, `grid`, `text-slate-950`,
+ * etc. Sin esta linea, las clases de Tailwind no tendrian estilos.
+ */
+@import "tailwindcss";
+
+/*
+ * Variables CSS globales.
+ *
+ * `:root` apunta al documento completo. Definimos colores base para poder
+ * reutilizarlos desde Tailwind y desde CSS normal.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #0f172a;
+}
+
+/*
+ * `@theme inline` es la forma de Tailwind v4 de exponer tokens al sistema de
+ * utilidades. Aqui conectamos nuestras variables y fuentes con Tailwind.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+}
+
+/*
+ * Estilos base del body.
+ *
+ * Estos estilos afectan a toda la aplicacion salvo que una clase concreta los
+ * sobrescriba en una seccion o componente.
+ */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/*
+ * Mejora visual global:
+ * `text-rendering` y el suavizado ayudan a que la tipografia se vea mas limpia
+ * en interfaces con mucho texto.
+ */
+body {
+  text-rendering: geometricPrecision;
+}
+
+/*
+ * Scroll suave para enlaces internos como `href="#contacto"`.
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+/*
+ * Color del texto cuando el usuario selecciona contenido con el raton.
+ */
+::selection {
+  background: #99f6e4;
+  color: #0f172a;
+}
+
+/*
+ * EFECTOS 2D REUTILIZABLES
+ *
+ * Los definimos como clases CSS normales para no llenar el JSX de animaciones
+ * repetidas. Luego se aplican en `page.tsx` con className.
+ */
+
+/*
+ * Fondo con patron 2D de puntos y lineas.
+ *
+ * Usa gradientes CSS, no imagenes. `background-size` define la cuadricula y la
+ * animacion mueve ligeramente el patron para dar sensacion de vida.
+ */
+.animated-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 20% 20%, rgba(20, 184, 166, 0.20), transparent 28%),
+    radial-gradient(circle at 82% 18%, rgba(245, 158, 11, 0.20), transparent 26%);
+  background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%;
+  animation: grid-drift 18s linear infinite;
+}
+
+/*
+ * Entrada suave hacia arriba.
+ *
+ * Sirve para que el hero no aparezca "duro" al cargar. Es una animacion corta,
+ * profesional y sin marear.
+ */
+.reveal-up {
+  animation: reveal-up 700ms ease both;
+}
+
+/*
+ * Variantes de retraso para escalonar la entrada de bloques.
+ */
+.delay-100 {
+  animation-delay: 100ms;
+}
+
+.delay-200 {
+  animation-delay: 200ms;
+}
+
+.delay-300 {
+  animation-delay: 300ms;
+}
+
+/*
+ * Flotacion 2D lenta para paneles decorativos.
+ *
+ * `transform: translateY(...)` mueve el bloque en el eje Y sin recalcular layout,
+ * por eso es mas eficiente que animar margenes o posiciones.
+ */
+.float-card {
+  animation: float-card 6s ease-in-out infinite;
+}
+
+/*
+ * Efecto de brillo horizontal.
+ *
+ * Lo usamos en el panel oscuro del hero. El pseudo-elemento crea una franja
+ * luminosa que se desplaza por encima del contenido.
+ */
+.shine-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-panel::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.14) 50%, transparent 65%);
+  transform: translateX(-55%);
+  animation: shine-sweep 7s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/*
+ * Elevacion 2D para tarjetas.
+ *
+ * Al pasar el raton, la tarjeta sube unos pixeles y aumenta la sombra. Esto da
+ * feedback interactivo sin convertir la web en algo ruidoso.
+ */
+.lift-card {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.lift-card:hover {
+  border-color: rgba(13, 148, 136, 0.35);
+  box-shadow: 0 22px 45px rgba(15, 23, 42, 0.10);
+  transform: translateY(-6px);
+}
+
+/*
+ * Subrayado animado para enlaces.
+ */
+.nav-link-effect {
+  position: relative;
+}
+
+.nav-link-effect::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  left: 0;
+  height: 2px;
+  background: #0d9488;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 180ms ease;
+}
+
+.nav-link-effect:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/*
+ * Barras decorativas del panel del hero.
+ *
+ * Simulan actividad/progreso sin depender de JavaScript.
+ */
+.meter-bar {
+  position: relative;
+  overflow: hidden;
+}
+
+.meter-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-100%);
+  animation: meter-scan 2.8s ease-in-out infinite;
+}
+
+/*
+ * Respeta a usuarios que prefieren menos movimiento.
+ *
+ * Es una buena practica de accesibilidad: si el sistema pide reducir
+ * animaciones, desactivamos los efectos principales.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+@keyframes grid-drift {
+  from {
+    background-position: 0 0, 0 0, 0 0, 0 0;
+  }
+  to {
+    background-position: 44px 44px, 44px 44px, 0 0, 0 0;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-card {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shine-sweep {
+  0%,
+  45% {
+    transform: translateX(-55%);
+  }
+  70%,
+  100% {
+    transform: translateX(55%);
+  }
+}
+
+@keyframes meter-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  55%,
+  100% {
+    transform: translateX(100%);
+  }
+}
